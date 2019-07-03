@@ -1,10 +1,13 @@
 package ua.com.foxminded.webuniversity.entity;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -15,11 +18,14 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
     @SequenceGenerator(name = "student_sequence", sequenceName = "student_id_seq", allocationSize = 1)
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name")
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH })
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     public Student() {
 
@@ -43,6 +49,14 @@ public class Student {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public boolean equals(Object obj) {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,15 +21,12 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "groups_sequence")
     @SequenceGenerator(name = "groups_sequence", sequenceName = "groups_id_seq", allocationSize = 1)
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH })
-    @JoinColumn(name = "group_id")
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH })
     private List<Student> students = new ArrayList<>();
 
     public Group() {
@@ -68,6 +64,7 @@ public class Group {
 
     public void addStudent(Student student) {
         students.add(student);
+        student.setGroup(this);
     }
 
     public void removeStudent(Student student) {

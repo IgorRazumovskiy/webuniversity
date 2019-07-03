@@ -3,18 +3,17 @@ package ua.com.foxminded.webuniversity.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.com.foxminded.webuniversity.dao.DAOException;
+import ua.com.foxminded.webuniversity.dao.EntryMissingException;
 import ua.com.foxminded.webuniversity.dao.GroupRepository;
 import ua.com.foxminded.webuniversity.entity.Group;
 
 @Service
 public class GroupServiceImpl implements GroupService {
+    
     private GroupRepository groupRepository;
 
-    @Autowired
     public GroupServiceImpl(GroupRepository groupRepository) {
         this.groupRepository = groupRepository;
     }
@@ -33,7 +32,7 @@ public class GroupServiceImpl implements GroupService {
         if (result.isPresent()) {
             group = result.get();
         } else {
-            throw new DAOException("Cannot find group id = " + id);
+            throw new EntryMissingException("Cannot find group id = " + id);
         }
         return group;
     }
