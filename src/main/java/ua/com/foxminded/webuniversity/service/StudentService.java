@@ -6,14 +6,16 @@ import ua.com.foxminded.webuniversity.entity.Student;
 
 public interface StudentService {
 
-    public Student create(Student student);
+    Student create(Student student);
 
-    public Student update(Student student);
+    Student update(Student student);
 
-    public Student findOne(Integer id);
+    Student findOne(Integer id);
 
-    public List<Student> findAll();
+    List<Student> findAll();
 
-    public void delete(Integer id);
+    void delete(Integer id);
+
+    List<Student> findAllByGroupId(Integer groupId);
 
 }

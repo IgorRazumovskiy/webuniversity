@@ -1,11 +1,12 @@
 package ua.com.foxminded.webuniversity.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import ua.com.foxminded.webuniversity.dao.EntryMissingException;
+import ua.com.foxminded.webuniversity.dao.EntityNotFoundException;
 import ua.com.foxminded.webuniversity.dao.StudentRepository;
 import ua.com.foxminded.webuniversity.entity.Student;
 
@@ -32,13 +33,18 @@ public class StudentServiceImpl implements StudentService {
         if (result.isPresent()) {
             student = result.get();
         } else {
-            throw new EntryMissingException("Cannot find student id = " + id);
+            throw new EntityNotFoundException("Cannot find student id = " + id);
         }
         return student;
     }
 
     public List<Student> findAll() {
         return studentRepository.findAll();
+    }
+    
+    public List<Student> findAllByGroupId(Integer groupId) {
+        List<Student> studentList = new ArrayList<>();
+        return studentList;
     }
 
     public void delete(Integer id) {

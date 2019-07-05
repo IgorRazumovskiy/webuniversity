@@ -11,15 +11,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ua.com.foxminded.webuniversity.dao.EntryMissingException;
+import ua.com.foxminded.webuniversity.dao.EntityNotFoundException;
 import ua.com.foxminded.webuniversity.entity.Group;
+import ua.com.foxminded.webuniversity.entity.Student;
 import ua.com.foxminded.webuniversity.service.GroupService;
+import ua.com.foxminded.webuniversity.service.StudentService;
 
 @RestController
-@RequestMapping("/university/groups")
+@RequestMapping("/groups")
 public class GroupRestController {
     
     private GroupService groupService;
+    private StudentService studentService;
 
     public GroupRestController(GroupService groupService) {
         this.groupService = groupService;
@@ -33,6 +36,11 @@ public class GroupRestController {
     @GetMapping("{groupId}")
     public Group findOne(@PathVariable Integer groupId) {
         return groupService.findOne(groupId);
+    }
+    
+    @GetMapping("{groupId}/students")
+    public List<Student> findAllByGroupId(Integer groupId) {
+        return studentService.findAllByGroupId(groupId);
     }
 
     @PostMapping()
@@ -49,7 +57,7 @@ public class GroupRestController {
     public String delete(@PathVariable Integer groupId) {
         Group group = groupService.findOne(groupId);
         if (group == null) {
-            throw new EntryMissingException("Cannot find group id = " + groupId);
+            throw new EntityNotFoundException("Cannot find group id = " + groupId);
         }
         groupService.delete(groupId);
         return "Delete group with id = " + groupId;

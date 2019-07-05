@@ -6,14 +6,14 @@ import ua.com.foxminded.webuniversity.entity.Group;
 
 public interface GroupService {
 
-    public Group create(Group group);
+    Group create(Group group);
 
-    public Group update(Group group);
+    Group update(Group group);
 
-    public Group findOne(Integer id);
+    Group findOne(Integer id);
 
-    public List<Group> findAll();
+    List<Group> findAll();
 
-    public void delete(Integer id);
+    void delete(Integer id);
 
 }

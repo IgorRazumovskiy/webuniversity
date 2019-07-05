@@ -5,13 +5,13 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import ua.com.foxminded.webuniversity.dao.EntryMissingException;
+import ua.com.foxminded.webuniversity.dao.EntityNotFoundException;
 import ua.com.foxminded.webuniversity.dao.GroupRepository;
 import ua.com.foxminded.webuniversity.entity.Group;
 
 @Service
 public class GroupServiceImpl implements GroupService {
-    
+  
     private GroupRepository groupRepository;
 
     public GroupServiceImpl(GroupRepository groupRepository) {
@@ -32,7 +32,7 @@ public class GroupServiceImpl implements GroupService {
         if (result.isPresent()) {
             group = result.get();
         } else {
-            throw new EntryMissingException("Cannot find group id = " + id);
+            throw new EntityNotFoundException("Cannot find group id = " + id);
         }
         return group;
     }
@@ -44,5 +44,5 @@ public class GroupServiceImpl implements GroupService {
     public void delete(Integer id) {
         groupRepository.deleteById(id);
     }
-
+    
 }

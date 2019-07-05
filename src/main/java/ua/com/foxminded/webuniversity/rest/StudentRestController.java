@@ -2,6 +2,7 @@ package ua.com.foxminded.webuniversity.rest;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,48 +12,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ua.com.foxminded.webuniversity.dao.EntryMissingException;
+import ua.com.foxminded.webuniversity.dao.EntityNotFoundException;
 import ua.com.foxminded.webuniversity.entity.Student;
 import ua.com.foxminded.webuniversity.service.StudentService;
 
 @RestController
-@RequestMapping("/university/students")
+@RequestMapping("/students")
 public class StudentRestController {
 
-    private StudentService studentService; 
+    private StudentService studentService;
 
     public StudentRestController(StudentService studentService) {
         this.studentService = studentService;
     }
 
     @GetMapping()
-    public List<Student> findAll() {
-        return studentService.findAll();
+    public ResponseEntity<List<Student>> findAll() {
+        return ResponseEntity.ok(studentService.findAll());
     }
 
     @GetMapping("{studentId}")
-    public Student findOne(@PathVariable Integer studentId) {
-        return studentService.findOne(studentId);
+    public ResponseEntity<Student> findOne(@PathVariable Integer studentId) {
+        return ResponseEntity.ok(studentService.findOne(studentId));
     }
 
     @PostMapping()
-    public Student create(@RequestBody Student student) {
-        return studentService.create(student);
+    public ResponseEntity<Student> create(@RequestBody Student student) {
+        return ResponseEntity.ok(studentService.create(student));
     }
 
     @PutMapping()
-    public Student update(@RequestBody Student student) {
-        return studentService.update(student);
+    public ResponseEntity<Student> update(@RequestBody Student student) {
+        return ResponseEntity.ok(studentService.update(student));
     }
 
     @DeleteMapping("{studentId}")
-    public String delete(@PathVariable Integer studentId) {
+    public ResponseEntity<String> delete(@PathVariable Integer studentId) {
         Student student = studentService.findOne(studentId);
         if (student == null) {
-            throw new EntryMissingException("Cannot find student id = " + studentId);
+            throw new EntityNotFoundException("Cannot find student id = " + studentId);
         }
         studentService.delete(studentId);
-        return "Delete student with id = " + studentId;      
+        return ResponseEntity.ok("Delete student with id = " + studentId);
     }
 
 }
