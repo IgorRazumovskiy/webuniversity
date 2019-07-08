@@ -6,13 +6,13 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import ua.com.foxminded.webuniversity.dao.EntityNotFoundException;
 import ua.com.foxminded.webuniversity.dao.StudentRepository;
 import ua.com.foxminded.webuniversity.entity.Student;
+import ua.com.foxminded.webuniversity.exception.EntityNotFoundException;
 
 @Service
 public class StudentServiceImpl implements StudentService {
-    
+
     private StudentRepository studentRepository;
 
     public StudentServiceImpl(StudentRepository studentRepository) {
@@ -41,14 +41,19 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> findAll() {
         return studentRepository.findAll();
     }
-    
+
     public List<Student> findAllByGroupId(Integer groupId) {
         List<Student> studentList = new ArrayList<>();
         return studentList;
     }
 
     public void delete(Integer id) {
-        studentRepository.deleteById(id);
+        Optional<Student> result = studentRepository.findById(id);
+        if (result.isPresent()) {
+            studentRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("Cannot find student id = " + id);
+        }
     }
 
 }

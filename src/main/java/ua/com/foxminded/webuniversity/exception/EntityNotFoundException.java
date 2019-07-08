@@ -1,4 +1,4 @@
-package ua.com.foxminded.webuniversity.dao;
+package ua.com.foxminded.webuniversity.exception;
 
 public class EntityNotFoundException extends RuntimeException {
 

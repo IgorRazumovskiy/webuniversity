@@ -2,6 +2,7 @@ package ua.com.foxminded.webuniversity.rest;
 
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ua.com.foxminded.webuniversity.dao.EntityNotFoundException;
 import ua.com.foxminded.webuniversity.entity.Student;
 import ua.com.foxminded.webuniversity.service.StudentService;
 
@@ -36,22 +36,18 @@ public class StudentRestController {
         return ResponseEntity.ok(studentService.findOne(studentId));
     }
 
-    @PostMapping()
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> create(@RequestBody Student student) {
         return ResponseEntity.ok(studentService.create(student));
     }
 
-    @PutMapping()
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> update(@RequestBody Student student) {
         return ResponseEntity.ok(studentService.update(student));
     }
 
     @DeleteMapping("{studentId}")
     public ResponseEntity<String> delete(@PathVariable Integer studentId) {
-        Student student = studentService.findOne(studentId);
-        if (student == null) {
-            throw new EntityNotFoundException("Cannot find student id = " + studentId);
-        }
         studentService.delete(studentId);
         return ResponseEntity.ok("Delete student with id = " + studentId);
     }
