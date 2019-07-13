@@ -2,7 +2,7 @@ package ua.com.foxminded.webuniversity.rest;
 
 import java.util.List;
 
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,12 +36,12 @@ public class StudentRestController {
         return ResponseEntity.ok(studentService.findOne(studentId));
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<Student> create(@RequestBody Student student) {
-        return ResponseEntity.ok(studentService.create(student));
+        return new ResponseEntity<Student>(studentService.create(student), HttpStatus.CREATED);
     }
 
-    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping()
     public ResponseEntity<Student> update(@RequestBody Student student) {
         return ResponseEntity.ok(studentService.update(student));
     }

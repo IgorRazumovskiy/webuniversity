@@ -3,6 +3,7 @@ package ua.com.foxminded.webuniversity.service;
 import java.util.List;
 
 import ua.com.foxminded.webuniversity.entity.Group;
+import ua.com.foxminded.webuniversity.entity.Student;
 
 public interface GroupService {
 
@@ -15,5 +16,7 @@ public interface GroupService {
     List<Group> findAll();
 
     void delete(Integer id);
+
+    List<Student> findStudentsByGroup(Integer groupId);
 
 }

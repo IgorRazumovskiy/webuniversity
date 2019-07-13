@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.webuniversity.dao.GroupRepository;
 import ua.com.foxminded.webuniversity.entity.Group;
+import ua.com.foxminded.webuniversity.entity.Student;
 import ua.com.foxminded.webuniversity.exception.EntityNotFoundException;
 
 @Service
@@ -48,6 +49,17 @@ public class GroupServiceImpl implements GroupService {
         } else {
             throw new EntityNotFoundException("Cannot find group id = " + id);
         }
+    }
+
+    public List<Student> findStudentsByGroup(Integer groupId) {
+        Optional<Group> result = groupRepository.findById(groupId);
+        Group group = null;
+        if (result.isPresent()) {
+            group = result.get();
+        } else {
+            throw new EntityNotFoundException("Cannot find group id = " + groupId);
+        }
+        return group.getStudents();
     }
     
 }

@@ -1,6 +1,5 @@
 package ua.com.foxminded.webuniversity.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,11 +39,6 @@ public class StudentServiceImpl implements StudentService {
 
     public List<Student> findAll() {
         return studentRepository.findAll();
-    }
-
-    public List<Student> findAllByGroupId(Integer groupId) {
-        List<Student> studentList = new ArrayList<>();
-        return studentList;
     }
 
     public void delete(Integer id) {

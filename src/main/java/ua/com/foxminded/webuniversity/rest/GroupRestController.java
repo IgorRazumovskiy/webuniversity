@@ -2,7 +2,7 @@ package ua.com.foxminded.webuniversity.rest;
 
 import java.util.List;
 
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,14 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.com.foxminded.webuniversity.entity.Group;
 import ua.com.foxminded.webuniversity.entity.Student;
 import ua.com.foxminded.webuniversity.service.GroupService;
-import ua.com.foxminded.webuniversity.service.StudentService;
 
 @RestController
 @RequestMapping("/groups")
 public class GroupRestController {
 
     private GroupService groupService;
-    private StudentService studentService;
 
     public GroupRestController(GroupService groupService) {
         this.groupService = groupService;
@@ -40,16 +38,16 @@ public class GroupRestController {
     }
 
     @GetMapping("{groupId}/students")
-    public ResponseEntity<List<Student>> findAllByGroupId(Integer groupId) {
-        return ResponseEntity.ok(studentService.findAllByGroupId(groupId));
+    public ResponseEntity<List<Student>> findAllByGroupId(@PathVariable Integer groupId) {
+        return ResponseEntity.ok(groupService.findStudentsByGroup(groupId));
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<Group> create(@RequestBody Group group) {
-        return ResponseEntity.ok(groupService.create(group));
+        return new ResponseEntity<Group>(groupService.create(group), HttpStatus.CREATED);
     }
 
-    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping()
     public ResponseEntity<Group> update(@RequestBody Group group) {
         return ResponseEntity.ok(groupService.update(group));
     }
@@ -58,6 +56,7 @@ public class GroupRestController {
     public ResponseEntity<String> delete(@PathVariable Integer groupId) {
         groupService.delete(groupId);
         return ResponseEntity.ok("Delete group with id = " + groupId);
+
     }
 
 }

@@ -16,6 +16,4 @@ public interface StudentService {
 
     void delete(Integer id);
 
-    List<Student> findAllByGroupId(Integer groupId);
-
 }
