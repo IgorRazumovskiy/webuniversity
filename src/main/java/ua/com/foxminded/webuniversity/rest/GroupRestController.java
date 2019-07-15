@@ -16,15 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.com.foxminded.webuniversity.entity.Group;
 import ua.com.foxminded.webuniversity.entity.Student;
 import ua.com.foxminded.webuniversity.service.GroupService;
+import ua.com.foxminded.webuniversity.service.StudentService;
 
 @RestController
 @RequestMapping("/groups")
 public class GroupRestController {
 
     private GroupService groupService;
+    private StudentService studentService;
 
-    public GroupRestController(GroupService groupService) {
+    public GroupRestController(GroupService groupService, StudentService studentService) {
         this.groupService = groupService;
+        this.studentService = studentService;
     }
 
     @GetMapping()
@@ -39,7 +42,7 @@ public class GroupRestController {
 
     @GetMapping("{groupId}/students")
     public ResponseEntity<List<Student>> findAllByGroupId(@PathVariable Integer groupId) {
-        return ResponseEntity.ok(groupService.findStudentsByGroup(groupId));
+        return ResponseEntity.ok(studentService.findStudentsByGroup(groupId));
     }
 
     @PostMapping()
@@ -56,7 +59,6 @@ public class GroupRestController {
     public ResponseEntity<String> delete(@PathVariable Integer groupId) {
         groupService.delete(groupId);
         return ResponseEntity.ok("Delete group with id = " + groupId);
-
     }
 
 }
