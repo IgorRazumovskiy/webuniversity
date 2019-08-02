@@ -51,7 +51,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public List<Student> findStudentsByGroup(Integer groupId) {
-        return studentRepository.findStudentsByGroup(groupId);
+        return studentRepository.findByGroupId(groupId);
     }
 
 }
