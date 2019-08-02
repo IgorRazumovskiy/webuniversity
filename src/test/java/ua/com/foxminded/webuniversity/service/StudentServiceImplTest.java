@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,14 +37,14 @@ class StudentServiceImplTest {
     }
 
     @Test
-    void testCreate() {
+    void createShouldReturnStudentWhenStudentSaved() {
         Student student = new Student("First");
         when(studentRepository.save(student)).thenReturn(student);
         assertEquals(student, studentService.create(student));
     }
 
     @Test
-    void testFindOne() {
+    void findOneShouldReturnStudentWhenStudentFound() {
         Student student = new Student("First");
         student.setId(1);
         when(studentRepository.findById(anyInt())).thenReturn(Optional.of(student));
@@ -52,24 +53,29 @@ class StudentServiceImplTest {
     }
 
     @Test
-    void testFindOneWithException() {
+    void findOneShouldReturnExceptionWhenStudentNotFound() {
         Student student = new Student("First");
         student.setId(1);
-        when(studentRepository.findById(2)).thenReturn(Optional.of(student));
+        when(studentRepository.findById(anyInt())).thenReturn(Optional.of(student));
         assertThrows(EntityNotFoundException.class, () -> {
-            studentService.findOne(1);
+            studentService.findOne(null);
         });
     }
 
     @Test
-    void testFindAll() {
-        when(studentRepository.findAll())
-                .thenReturn(Stream.of(new Student("First"), new Student("Second")).collect(Collectors.toList()));
+    void findAllShouldReturnListWithAllStudents() {
+        when(studentRepository.findAll()).thenReturn(createStudentList());
         assertEquals(2, studentService.findAll().size());
     }
 
     @Test
-    void testDelete() {
+    void findAllShouldReturnEmptyListWhenNoStudents() {
+        when(studentRepository.findByGroupId(anyInt())).thenReturn(createStudentList().subList(0, 0));
+        assertEquals(0, studentService.findAll().size());
+    }
+
+    @Test
+    void deleteShouldCallMethodOneTimeWhenStudentFound() {
         Student student = new Student("First");
         student.setId(1);
         when(studentRepository.findById(anyInt())).thenReturn(Optional.of(student));
@@ -78,10 +84,26 @@ class StudentServiceImplTest {
     }
 
     @Test
-    void testFindStudentsByGroup() {
-        when(studentRepository.findByGroupId(anyInt()))
-                .thenReturn(Stream.of(new Student("First")).collect(Collectors.toList()));
+    void deleteShouldReturnExceptionWhenStudentNotFound() {
+        Student student = new Student("First");
+        student.setId(1);
+        assertThrows(EntityNotFoundException.class, () -> {
+            studentService.delete(1);
+        });
+    }
+
+    @Test
+    void findStudentsByGroupShouldReturnListWhenStudentInGroup() {
+        when(studentRepository.findByGroupId(anyInt())).thenReturn(createStudentList().subList(0, 1));
         assertEquals(1, studentService.findStudentsByGroup(3).size());
+    }
+
+    private List<Student> createStudentList() {
+        Student student = new Student("First");
+        student.setId(1);
+        Student student2 = new Student("Second");
+        student.setId(2);
+        return Stream.of(student, student2).collect(Collectors.toList());
     }
 
 }
