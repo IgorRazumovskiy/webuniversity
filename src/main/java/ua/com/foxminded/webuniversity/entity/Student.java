@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "student")
@@ -20,6 +23,9 @@ public class Student {
     @SequenceGenerator(name = "student_sequence", sequenceName = "student_id_seq", allocationSize = 1)
     private Integer id;
 
+    @NotNull(message = "Student name can not be null")
+    @Length(message = "Student name should have atleast 3 characters", min = 3)
+    @Length(message = "Student name should have less than 30 characters", max = 30)
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
