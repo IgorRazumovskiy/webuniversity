@@ -2,6 +2,8 @@ package ua.com.foxminded.webuniversity.rest;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,12 +39,12 @@ public class StudentRestController {
     }
 
     @PostMapping()
-    public ResponseEntity<Student> create(@RequestBody Student student) {
+    public ResponseEntity<Student> create(@Valid @RequestBody Student student) {
         return new ResponseEntity<Student>(studentService.create(student), HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity<Student> update(@RequestBody Student student) {
+    public ResponseEntity<Student> update(@Valid @RequestBody Student student) {
         return ResponseEntity.ok(studentService.update(student));
     }
 
