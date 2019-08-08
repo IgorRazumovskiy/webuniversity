@@ -12,6 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,12 +29,18 @@ public class Group {
     @SequenceGenerator(name = "groups_sequence", sequenceName = "groups_id_seq", allocationSize = 1)
     private Integer id;
 
+    @NotEmpty(message = "Group name can not be empty")
+    @NotNull(message = "Group name can not be null")
+    @Length(message = "Group name should have atleast 5 characters", min = 5)
     private String name;
 
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.PERSIST, CascadeType.REFRESH })
     @JsonIgnore
+    @Valid
     private List<Student> students = new ArrayList<>();
+
+    private Integer maxNumberOfStudents;
 
     public Group() {
 
@@ -38,6 +49,12 @@ public class Group {
     public Group(String name, List<Student> students) {
         this.setName(name);
         this.setStudents(students);
+    }
+
+    public Group(String name, List<Student> students, Integer maxNumberOfStudents) {
+        this.name = name;
+        this.students = students;
+        this.maxNumberOfStudents = maxNumberOfStudents;
     }
 
     public Integer getId() {
@@ -73,6 +90,14 @@ public class Group {
         students.remove(student);
     }
 
+    public Integer getMaxNumberOfStudents() {
+        return maxNumberOfStudents;
+    }
+
+    public void setMaxNumberOfStudents(Integer maxNumberOfStudents) {
+        this.maxNumberOfStudents = maxNumberOfStudents;
+    }
+
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -97,7 +122,7 @@ public class Group {
     }
 
     public String toString() {
-        return "Group [id=" + id + ", name=" + name + "]";
+        return "Group [id=" + id + ", name=" + name + ", maxNumberOfStudents=" + maxNumberOfStudents + "]";
     }
 
 }
