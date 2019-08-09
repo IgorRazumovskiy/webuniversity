@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -34,12 +35,14 @@ public class Group {
     @Length(message = "Group name should have atleast 5 characters", min = 5)
     private String name;
 
+    @Valid
+    @JsonIgnore
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.PERSIST, CascadeType.REFRESH })
-    @JsonIgnore
-    @Valid
     private List<Student> students = new ArrayList<>();
 
+    @NotNull(message = "Number of students in group can not be null")
+    @PositiveOrZero(message = "Number of students in group can not be negative")
     private Integer maxNumberOfStudents;
 
     public Group() {

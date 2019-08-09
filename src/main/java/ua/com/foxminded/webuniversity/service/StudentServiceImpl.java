@@ -6,17 +6,20 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import ua.com.foxminded.webuniversity.dao.StudentRepository;
+import ua.com.foxminded.webuniversity.entity.Group;
 import ua.com.foxminded.webuniversity.entity.Student;
 import ua.com.foxminded.webuniversity.exception.EntityNotFoundException;
-import ua.com.foxminded.webuniversity.exception.ExcessNumberStudentsInGroupException;
+import ua.com.foxminded.webuniversity.exception.StudentsLimitExceededGroupException;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
     private StudentRepository studentRepository;
+    private GroupService groupService;
 
-    public StudentServiceImpl(StudentRepository studentRepository) {
+    public StudentServiceImpl(StudentRepository studentRepository, GroupService groupService) {
         this.studentRepository = studentRepository;
+        this.groupService = groupService;
     }
 
     public Student create(Student student) {
@@ -24,13 +27,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public Student update(Student student) {
-        if (studentRepository.findByGroupId(student.getGroup().getId()).size() < student.getGroup()
-                .getMaxNumberOfStudents()) {
-            return studentRepository.save(student);
-        } else {
-            throw new ExcessNumberStudentsInGroupException(
-                    "Too much student in group id = " + student.getGroup().getId());
+        Group group = groupService.findOne(student.getGroup().getId());
+        if (group.getStudents().size() >= group.getMaxNumberOfStudents()) {
+            throw new StudentsLimitExceededGroupException(
+                    "Too much students in " + group);
         }
+        return studentRepository.save(student);
     }
 
     public Student findOne(Integer id) {

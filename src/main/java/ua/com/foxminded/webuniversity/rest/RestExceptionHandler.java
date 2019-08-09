@@ -10,7 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import ua.com.foxminded.webuniversity.exception.EntityNotFoundException;
-import ua.com.foxminded.webuniversity.exception.ExcessNumberStudentsInGroupException;
+import ua.com.foxminded.webuniversity.exception.StudentsLimitExceededGroupException;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -26,8 +26,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
-    @ExceptionHandler(ExcessNumberStudentsInGroupException.class)
-    protected ResponseEntity<Object> handleExcessNumberStudentsInGroup(ExcessNumberStudentsInGroupException ex) {
+    @ExceptionHandler(StudentsLimitExceededGroupException.class)
+    protected ResponseEntity<Object> handleStudentsLimitExceededGroup(StudentsLimitExceededGroupException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
