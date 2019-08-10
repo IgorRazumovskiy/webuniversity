@@ -9,7 +9,7 @@ import ua.com.foxminded.webuniversity.dao.StudentRepository;
 import ua.com.foxminded.webuniversity.entity.Group;
 import ua.com.foxminded.webuniversity.entity.Student;
 import ua.com.foxminded.webuniversity.exception.EntityNotFoundException;
-import ua.com.foxminded.webuniversity.exception.StudentsLimitExceededGroupException;
+import ua.com.foxminded.webuniversity.exception.StudentsLimitExceededException;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -29,7 +29,7 @@ public class StudentServiceImpl implements StudentService {
     public Student update(Student student) {
         Group group = groupService.findOne(student.getGroup().getId());
         if (group.getStudents().size() >= group.getMaxNumberOfStudents()) {
-            throw new StudentsLimitExceededGroupException(
+            throw new StudentsLimitExceededException(
                     "Too much students in " + group);
         }
         return studentRepository.save(student);
