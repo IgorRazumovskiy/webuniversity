@@ -2,6 +2,8 @@ package ua.com.foxminded.webuniversity.rest;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,12 +48,12 @@ public class GroupRestController {
     }
 
     @PostMapping()
-    public ResponseEntity<Group> create(@RequestBody Group group) {
+    public ResponseEntity<Group> create(@Valid @RequestBody Group group) {
         return new ResponseEntity<Group>(groupService.create(group), HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity<Group> update(@RequestBody Group group) {
+    public ResponseEntity<Group> update(@Valid @RequestBody Group group) {
         return ResponseEntity.ok(groupService.update(group));
     }
 
