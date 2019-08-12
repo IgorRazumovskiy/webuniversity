@@ -29,8 +29,7 @@ public class StudentServiceImpl implements StudentService {
     public Student update(Student student) {
         Group group = groupService.findOne(student.getGroup().getId());
         if (group.getStudents().size() >= group.getMaxNumberOfStudents()) {
-            throw new StudentsLimitExceededException(
-                    "Too much students in " + group);
+            throw new StudentsLimitExceededException("Too much students in " + group);
         }
         return studentRepository.save(student);
     }
