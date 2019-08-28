@@ -1,0 +1,19 @@
+student: 
+  - id: 1 
+    name: "Первый" 
+    group_id: 1 
+  - id: 2 
+    name: "Второй" 
+    group_id: 1 
+  - id: 3 
+    name: "Третий" 
+    group_id: 2 
+groups: 
+  - id: 1 
+    name: "ТЕХ" 
+    faculty_id: 
+    maxNumberOfStudents: 8 
+  - id: 2 
+    name: "ГУМ" 
+    faculty_id: 
+    maxNumberOfStudents: 6 

@@ -1,5 +1,6 @@
 package ua.com.foxminded.webuniversity.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,22 +17,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.spring.api.DBRider;
 
-import ua.com.foxminded.webuniversity.WebuniversityApplication;
 import ua.com.foxminded.webuniversity.dao.StudentRepository;
 import ua.com.foxminded.webuniversity.entity.Group;
 import ua.com.foxminded.webuniversity.entity.Student;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = WebuniversityApplication.class)
+@SpringBootTest()
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:application-integrationtest.properties")
+@DBRider
 class StudentRestControllerTest {
 
     @Autowired
@@ -44,18 +44,14 @@ class StudentRestControllerTest {
     private StudentRepository studentRepository;
 
     @Test
+    @DataSet("students.yml")
     public void findAllShouldReturnStudentListWhenRequestIsOk() throws Exception {
         mockMvc.perform(get("/students"))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$[0].id").value(1))
-            .andExpect(jsonPath("$[0].name").value("Реджи"))
-            .andExpect(jsonPath("$[1].id").value(2))
-            .andExpect(jsonPath("$[1].name").value("Алексис"))
-            .andExpect(jsonPath("$[2].id").value(3))
-            .andExpect(jsonPath("$[2].name").value("Карла"))
             .andDo(print());
+
+        assertThat(studentRepository.count()).isEqualTo(3);
     }
 
     @Test
